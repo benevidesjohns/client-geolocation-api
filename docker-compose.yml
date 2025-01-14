@@ -1,0 +1,49 @@
+services:
+  app:
+    container_name: ${APP_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${APP_NAME}
+    volumes:
+      - .:/build
+    ports:
+      - 8080:8080
+    environment:
+      DB_HOST: ${MYSQL_DB_HOST}
+      DB_PORT: ${MYSQL_DB_PORT}
+      DB_USER: ${MYSQL_DB_USER}
+      DB_PASSWORD: ${MYSQL_DB_PASSWORD}
+      DB_NAME: ${MYSQL_DB_NAME}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - go-network
+
+  mysql:
+    container_name: go-mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
+      MYSQL_USER: ${MYSQL_DB_USER}
+      MYSQL_PASSWORD: ${MYSQL_DB_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - go-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  dbdata:
+
+
+networks:
+  go-network:
+    driver: bridge
