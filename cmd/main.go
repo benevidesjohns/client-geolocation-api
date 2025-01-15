@@ -8,7 +8,7 @@ import (
 
 	"fmt"
 	"log"
-	"net/http"
+	// "net/http"
 )
 
 var (
@@ -35,13 +35,20 @@ type Client struct {
 	UpdatedAt    sql.NullTime `json:"updated_at"`
 }
 
-type handleTest struct{}
+// type handleTest struct{}
 
-func (h handleTest) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "test")
-}
+// func (h handleTest) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// 	fmt.Fprintf(w, "test")
+// }
 
 func main() {
+	// h := handleTest{}
+
+	// http.Handle("/", h)
+
+	// log.Println("server starting... port: 8080")
+	// log.Fatal(http.ListenAndServe(":8080", nil))
+
 	var err error
 	var insertError error
 
@@ -50,7 +57,7 @@ func main() {
 		panic(err)
 	}
 
-	client := Client{
+	newClient := Client{
 		Name:         "Joao Benevides",
 		Test:         "Teste",
 		WeightKG:     77.00,
@@ -59,36 +66,50 @@ func main() {
 		Number:       "123",
 		Neighborhood: "Centro",
 		Complement:   "Apartamento 10",
-		City:         "Bahia",
+		City:         "São Paulo",
 		State:        "BA",
 		Country:      "Brasil",
 		Latitude:     -23.550520,
 		Longitude:    -46.633308,
 		CreatedAt:    time.Now(),
 	}
-	insertError = insertClient(client)
+	insertError = createClient(newClient)
 	if insertError != nil {
-		log.Fatalf("Error to insert client: %v", insertError)
+		log.Fatalf("Error to insert client: %v\n", insertError)
 	}
 
 	clients, err := getAllClients()
 	if err != nil {
-		log.Fatalf("Error to get all clients: %v", err)
+		log.Fatalf("Error to get all clients: %v\n", err)
 	}
 
+	log.Printf("\nGet all clients")
 	for _, c := range clients {
 		log.Printf("Client: %v", c)
 	}
+	log.Printf("\n")
 
-	h := handleTest{}
+	city := "São Paulo"
+	clients, err = getClientsByCity(city)
+	if err != nil {
+		log.Fatalf("Error to get all clients by city: %v", err)
+	}
 
-	http.Handle("/", h)
+	log.Printf("\nGet clients by city")
+	for _, c := range clients {
+		fmt.Printf("Client: %v", c)
+	}
 
-	log.Println("server starting... port: 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	client, err := getClientByID(48)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Printf("\nClient by ID (48): %v", client)
 }
 
-func insertClient(client Client) error {
+func createClient(client Client) error {
 	query := `
 		INSERT INTO clients (
 			name, test, weight_kg, address, street, number, neighborhood, 
@@ -121,6 +142,63 @@ func getAllClients() ([]*Client, error) {
 	defer res.Close()
 
 	var clients = []*Client{}
+
+	for res.Next() {
+		var client Client
+
+		err := res.Scan(
+			&client.ID, &client.Name, &client.Test, &client.WeightKG,
+			&client.Address, &client.Street, &client.Number, &client.Neighborhood,
+			&client.Complement, &client.City, &client.State, &client.Country,
+			&client.Latitude, &client.Longitude, &client.CreatedAt, &client.UpdatedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %v", err)
+		}
+
+		clients = append(clients, &client)
+	}
+
+	return clients, nil
+}
+
+func getClientByID(id int) (*Client, error) {
+	query := `
+		SELECT id, name, test, weight_kg, address, street, number, neighborhood,
+		       complement, city, state, country, latitude, longitude, created_at, updated_at
+		FROM clients 
+		WHERE id = ?
+	`
+
+	var client Client
+	err := db.QueryRow(query, id).Scan(
+		&client.ID, &client.Name, &client.Test, &client.WeightKG,
+		&client.Address, &client.Street, &client.Number, &client.Neighborhood,
+		&client.Complement, &client.City, &client.State, &client.Country,
+		&client.Latitude, &client.Longitude, &client.CreatedAt, &client.UpdatedAt,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("client with ID %d not found", id)
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("error querying client by ID: %v", err)
+	}
+
+	return &client, nil
+}
+
+func getClientsByCity(city string) ([]*Client, error) {
+	query := `SELECT * FROM clients WHERE city = ?`
+
+	res, err := db.Query(query, city)
+	if err != nil {
+		return nil, fmt.Errorf("error to get fetch clients: %v", err)
+	}
+	defer res.Close()
+
+	var clients []*Client
 
 	for res.Next() {
 		var client Client
