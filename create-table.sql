@@ -15,7 +15,7 @@ CREATE TABLE `clients` (
     `latitude` DECIMAL(10, 8) NOT NULL
     `longitude` DECIMAL(11, 8) NOT NULL
     `created_at` TIMESTAMP NOT NULL
-    `updated_at` TIMESTAMP
+    `updated_at` TIMESTAMP NOT NULL
 )
 
 -- TODO: remember -> run docker cp create-table.sql go-mysql:/create-table.sql

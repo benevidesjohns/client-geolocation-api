@@ -17,22 +17,22 @@ var (
 
 // Client -> clients table in database
 type Client struct {
-	ID           int          `json:"id"`
-	Name         string       `json:"name"`
-	Test         string       `json:"test"`
-	WeightKG     float64      `json:"weight_kg"`
-	Address      string       `json:"address"`
-	Street       string       `json:"street"`
-	Number       string       `json:"number"`
-	Neighborhood string       `json:"neighborhood"`
-	Complement   string       `json:"complement"`
-	City         string       `json:"city"`
-	State        string       `json:"state"`
-	Country      string       `json:"country"`
-	Latitude     float64      `json:"latitude"`
-	Longitude    float64      `json:"longitude"`
-	CreatedAt    time.Time    `json:"created_at"`
-	UpdatedAt    sql.NullTime `json:"updated_at"`
+	ID           int       `json:"id"`
+	Name         string    `json:"name"`
+	Test         string    `json:"test"`
+	WeightKG     float64   `json:"weight_kg"`
+	Address      string    `json:"address"`
+	Street       string    `json:"street"`
+	Number       string    `json:"number"`
+	Neighborhood string    `json:"neighborhood"`
+	Complement   string    `json:"complement"`
+	City         string    `json:"city"`
+	State        string    `json:"state"`
+	Country      string    `json:"country"`
+	Latitude     float64   `json:"latitude"`
+	Longitude    float64   `json:"longitude"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 // type handleTest struct{}
@@ -50,7 +50,6 @@ func main() {
 	// log.Fatal(http.ListenAndServe(":8080", nil))
 
 	var err error
-	var insertError error
 
 	db, err = sql.Open("mysql", "user:password@tcp(172.19.0.2:3306)/geo-clients-db?parseTime=true")
 	if err != nil {
@@ -66,16 +65,17 @@ func main() {
 		Number:       "123",
 		Neighborhood: "Centro",
 		Complement:   "Apartamento 10",
-		City:         "São Paulo",
+		City:         "Jequié",
 		State:        "BA",
 		Country:      "Brasil",
 		Latitude:     -23.550520,
 		Longitude:    -46.633308,
 		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 	}
-	insertError = createClient(newClient)
-	if insertError != nil {
-		log.Fatalf("Error to insert client: %v\n", insertError)
+	err = createClient(newClient)
+	if err != nil {
+		log.Fatalf("Error to insert client: %v\n", err)
 	}
 
 	clients, err := getAllClients()
@@ -89,7 +89,7 @@ func main() {
 	}
 	log.Printf("\n")
 
-	city := "São Paulo"
+	city := "Bahia"
 	clients, err = getClientsByCity(city)
 	if err != nil {
 		log.Fatalf("Error to get all clients by city: %v", err)
@@ -100,28 +100,55 @@ func main() {
 		fmt.Printf("Client: %v", c)
 	}
 
-	client, err := getClientByID(48)
+	updatedClient := Client{
+		ID:           2,
+		Name:         "Joao silva",
+		Test:         "Teste 2",
+		WeightKG:     75,
+		Address:      "Rua teste 2, 456",
+		Street:       "Rua teste 2",
+		Number:       "456",
+		Neighborhood: "Bairro teste",
+		Complement:   "Apto 101",
+		City:         "Belford Roxo",
+		State:        "Rio de Janeiro",
+		Country:      "Brasil",
+		Latitude:     40.7128,
+		Longitude:    -74.0060,
+	}
+
+	err = updateClient(updatedClient)
+	if err != nil {
+		log.Fatalf("Error to update client: %v", err)
+	}
+
+	client, err := getClientByID(1)
 	if err != nil {
 		log.Printf("Error: %v", err)
 		return
 	}
 
-	fmt.Printf("\nClient by ID (48): %v", client)
+	fmt.Printf("\nClient by ID (1): %v", client)
+
+	err = deleteClient(1)
+	if err != nil {
+		log.Fatalf("Error to delete client: %v\n", err)
+	}
 }
 
 func createClient(client Client) error {
 	query := `
 		INSERT INTO clients (
-			name, test, weight_kg, address, street, number, neighborhood, 
-			complement, city, state, country, latitude, longitude, created_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			name, test, weight_kg, address, street, number, neighborhood,
+			complement, city, state, country, latitude, longitude, created_at, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
 	_, err := db.Exec(query,
 		client.Name, client.Test, client.WeightKG, client.Address,
 		client.Street, client.Number, client.Neighborhood, client.Complement,
 		client.City, client.State, client.Country, client.Latitude, client.Longitude,
-		client.CreatedAt,
+		client.CreatedAt, client.UpdatedAt,
 	)
 	if err != nil {
 		return fmt.Errorf("error to insert client: %v", err)
@@ -217,4 +244,58 @@ func getClientsByCity(city string) ([]*Client, error) {
 	}
 
 	return clients, nil
+}
+
+func updateClient(client Client) error {
+	query := `
+		UPDATE clients
+		SET name = ?, test = ?, weight_kg = ?, address = ?, street = ?, number = ?, neighborhood = ?, 
+			complement = ?, city = ?, state = ?, country = ?, latitude = ?, longitude = ?, updated_at = NOW()
+		WHERE id = ?
+	`
+
+	res, err := db.Exec(query,
+		client.Name, client.Test, client.WeightKG, client.Address,
+		client.Street, client.Number, client.Neighborhood, client.Complement,
+		client.City, client.State, client.Country, client.Latitude, client.Longitude,
+		client.ID,
+	)
+	if err != nil {
+		return fmt.Errorf("error to update client: %v", err)
+	}
+
+	ra, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error to check update: %w", err)
+	}
+	if ra == 0 {
+		return fmt.Errorf("client with ID %d not found", client.ID)
+	}
+
+	log.Println("client updated successfully")
+
+	return nil
+}
+
+func deleteClient(id int) error {
+	query := `
+		DELETE FROM clients WHERE id = ?
+	`
+
+	res, err := db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("error to delete client: %v", err)
+	}
+
+	ra, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error to check deletion: %w", err)
+	}
+	if ra == 0 {
+		return fmt.Errorf("client with ID %d not found", id)
+	}
+
+	log.Println("client deleted successfully")
+
+	return nil
 }
