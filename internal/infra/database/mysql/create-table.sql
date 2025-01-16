@@ -17,5 +17,3 @@ CREATE TABLE `clients` (
     `created_at` TIMESTAMP NOT NULL,
     `updated_at` TIMESTAMP NOT NULL
 )
-
--- TODO: remember -> run docker cp create-table.sql go-mysql:/create-table.sql
