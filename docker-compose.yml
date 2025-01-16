@@ -10,11 +10,11 @@ services:
     ports:
       - 8080:8080
     environment:
-      DB_HOST: ${MYSQL_DB_HOST}
-      DB_PORT: ${MYSQL_DB_PORT}
-      DB_USER: ${MYSQL_DB_USER}
-      DB_PASSWORD: ${MYSQL_DB_PASSWORD}
-      DB_NAME: ${MYSQL_DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
     depends_on:
       mysql:
         condition: service_healthy
@@ -23,12 +23,14 @@ services:
 
   mysql:
     container_name: go-mysql
-    image: mysql:8.0
+    build:
+      dockerfile: db.dockerfile
+    image: go-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
-      MYSQL_USER: ${MYSQL_DB_USER}
-      MYSQL_PASSWORD: ${MYSQL_DB_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - dbdata:/var/lib/mysql
     networks:
