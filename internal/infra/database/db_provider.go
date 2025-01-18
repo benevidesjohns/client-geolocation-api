@@ -1,9 +1,9 @@
 package database
 
 import (
-	interfaces "github.com/benevidesjohns/client-geolocation-api/internal/app/repository"
+	"database/sql"
 
-	"github.com/benevidesjohns/client-geolocation-api/internal/infra/database/mysql"
+	interfaces "github.com/benevidesjohns/client-geolocation-api/internal/app/repository"
 	"github.com/benevidesjohns/client-geolocation-api/internal/infra/database/mysql/repository"
 )
 
@@ -17,15 +17,10 @@ type DBProvider struct {
 	ClientRepo interfaces.ClientRepository
 }
 
-func NewDBProvider() (*DBProvider, error) {
-	// Inicializa conexão com o banco
-	db, err := mysql.NewDBConnection()
-	if err != nil {
-		return nil, err
-	}
-
-	// Inicializa o repositório com a implementação concreta
-	clientRepo := &repository.ClientRepository{DB: db}
+// Função que cria uma nova instância do DBProvider com as dependências necessárias
+func NewDBProvider(db *sql.DB) (*DBProvider, error) {
+	// Inicializa o repositório de cliente, que depende do banco conectado
+	clientRepo := repository.NewClientRepository(db)
 
 	return &DBProvider{
 		ClientRepo: clientRepo,

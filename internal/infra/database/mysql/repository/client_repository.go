@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/benevidesjohns/client-geolocation-api/internal/app/domain/models"
+	"github.com/benevidesjohns/client-geolocation-api/internal/app/repository"
 )
 
 /*
@@ -17,6 +18,17 @@ e a manutenção/reutilização de código.
 */
 type ClientRepository struct {
 	DB *sql.DB
+}
+
+/*
+Função que cria uma nova instância do repositório de 'clients'.
+
+O motivo é facilitar a inicialização do ClientRepository,
+pra garantir que ele receba a conexão com o banco de dados
+necessária para executar as operações.
+*/
+func NewClientRepository(db *sql.DB) repository.ClientRepository {
+	return &ClientRepository{DB: db}
 }
 
 /*
@@ -176,7 +188,7 @@ func (repo *ClientRepository) Update(client *Client) error {
 	query := `
 		UPDATE clients
 		SET name = ?, test = ?, weight_kg = ?, address = ?, street = ?, number = ?, neighborhood = ?, 
-			complement = ?, city = ?, state = ?, country = ?, latitude = ?, longitude = ?, updated_at = NOW()
+			complement = ?, city = ?, state = ?, country = ?, latitude = ?, longitude = ?, updated_at = ?
 		WHERE id = ?
 	`
 
@@ -184,6 +196,7 @@ func (repo *ClientRepository) Update(client *Client) error {
 		client.Name, client.Test, client.WeightKG, client.Address,
 		client.Street, client.Number, client.Neighborhood, client.Complement,
 		client.City, client.State, client.Country, client.Latitude, client.Longitude,
+		client.UpdatedAt,
 		client.ID,
 	)
 	if err != nil {
