@@ -1,0 +1,5 @@
+.env
+
+# exclude the air-generated binary file and tmp dir
+main
+tmp

@@ -1,12 +1,10 @@
 services:
-  app:
+  backend:
     container_name: ${APP_NAME}
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: ./backend/.
     image: ${APP_NAME}
     volumes:
-      - .:/build
+      - ./backend/:/build
     ports:
       - 8080:8080
     environment:
@@ -16,15 +14,13 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     networks:
       - go-network
 
   mysql:
     container_name: go-mysql
-    build:
-      dockerfile: db.dockerfile
+    build: ./database/.
     image: go-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -35,12 +31,20 @@ services:
       - dbdata:/var/lib/mysql
     networks:
       - go-network
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+
+  frontend:
+    container_name: go-front
+    image: node:jod-slim
+    volumes:
+      - ./frontend/:/app
+    ports:
+      - 3000:3000
+    networks:
+      - go-network
+    depends_on:
+      - backend
+    tty: true
+    stdin_open: true
 
 volumes:
   dbdata:
