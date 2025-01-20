@@ -59,8 +59,10 @@ Motivo dos parâmetros utilizados:
 -> charset-utf8, para definir o conjunto de caracteres usado pelo banco como UTF-8 e permitir caracteres especiais.
 
 -> loc=America%2Sao_Paulo, para especificar o timezone usado nas operações com datas e horas.
+
+-> tls==skip-verify, para configurar o driver para ignorar a verificação de certificados TLS/SSL
 */
 func (c *DBConfig) DSN() string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8&loc=America%%2FSao_Paulo",
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8&loc=America%%2FSao_Paulo&tls=skip-verify",
 		c.User, c.Password, c.Host, c.Port, c.DBName)
 }

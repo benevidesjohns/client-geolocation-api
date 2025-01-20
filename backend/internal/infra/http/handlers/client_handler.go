@@ -55,7 +55,7 @@ func (h *ClientHandler) CreateClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Retorna sucesso com código 201 Created
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "Client created successfully",
@@ -84,6 +84,8 @@ func (h *ClientHandler) GetAllClients(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(clients)
 }
 
@@ -105,6 +107,8 @@ func (h *ClientHandler) GetClientByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(client)
 }
 
@@ -132,6 +136,8 @@ func (h *ClientHandler) UpdateClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "Client updated successfully",
 	})
@@ -154,6 +160,8 @@ func (h *ClientHandler) DeleteClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "Client deleted successfully",
 	})
@@ -169,6 +177,8 @@ func (h *ClientHandler) DeleteAllClients(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "All clients deleted successfully",
 	})
