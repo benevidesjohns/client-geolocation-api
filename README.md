@@ -28,6 +28,7 @@ Follow these steps to set up and run the project on your local machine.
 Make sure you have the following installed:
 
 - [Docker](https://www.docker.com/get-started)
+- [Golang](https://go.dev/doc/tutorial/getting-started)
 
 ---
 
