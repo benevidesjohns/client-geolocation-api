@@ -81,12 +81,12 @@ Make sure you have the following installed:
      ```bash
      docker exec -it go-front bash
      ```
-      Now run the following commands:
+     Now run the following commands:
 
      ```bash
      npm install
      ```
-      To install the required packages (node_modules).
+     To install the required packages (node_modules).
       
      ```bash
      npm run dev
@@ -98,7 +98,7 @@ Make sure you have the following installed:
      docker exec -it go-api sh
      ```
 
-   - Navigate to the go-api container and start the server using the command:
+     Navigate to the go-api container and start the server using the command:
      ```bash
      air
      ```
