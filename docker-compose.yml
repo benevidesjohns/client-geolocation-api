@@ -46,7 +46,6 @@ services:
       - backend
     tty: true
     stdin_open: true
-    entrypoint: [ 'npm', 'run', 'dev' ]
 
 volumes:
   dbdata:
