@@ -59,7 +59,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"mame\": \"João Silva\",\n  \"test\": \"Teste 2\",\n  \"weight_kg\": 69.00,\n  \"address\": \"Rua Teste, 456\",\n  \"street\": \"Rua Teste\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Centro\",\n  \"complement\": \"Apartamento 10\",\n  \"city\": \"Jequié\",\n  \"state\": \"BA\",\n  \"country\": \"Brasil\",\n  \"latitude\": -23.550520,\n  \"longitude\": -46.633308,\n  \"created_at\": \"2025-01-18T12:00:00Z\",\n  \"updated_at\": \"2025-01-18T12:00:00Z\"\n}",
+					"raw": "{\n  \"name\": \"João Silva\",\n  \"test\": \"Teste 2\",\n  \"weight_kg\": 69.00,\n  \"address\": \"Rua Teste, 456\",\n  \"street\": \"Rua Teste\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Centro\",\n  \"complement\": \"Apartamento 10\",\n  \"city\": \"Jequié\",\n  \"state\": \"BA\",\n  \"country\": \"Brasil\",\n  \"latitude\": -23.550520,\n  \"longitude\": -46.633308,\n  \"created_at\": \"2025-01-18T12:00:00Z\",\n  \"updated_at\": \"2025-01-18T12:00:00Z\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -98,7 +98,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"Name\": \"Joao Benevides\",\n  \"Test\": \"Teste Atualizado\",\n  \"WeightKG\": 80.00,\n  \"Address\": \"Rua Teste, 456\",\n  \"Street\": \"Rua Teste\",\n  \"Number\": \"456\",\n  \"Neighborhood\": \"Centro\",\n  \"Complement\": \"Apartamento 15\",\n  \"City\": \"Jequié\",\n  \"State\": \"BA\",\n  \"Country\": \"Brasil\",\n  \"Latitude\": -23.550520,\n  \"Longitude\": -46.633308,\n  \"CreatedAt\": \"2025-01-18T12:00:00Z\",\n  \"UpdatedAt\": \"2025-01-18T12:00:00Z\"\n}",
+					"raw": "{\n  \"name\": \"Joao Benevides\",\n  \"test\": \"Teste Atualizado\",\n  \"weight_kg\": 80.00,\n  \"address\": \"Rua Teste, 456\",\n  \"street\": \"Rua Teste\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Centro\",\n  \"complement\": \"Apartamento 15\",\n  \"city\": \"Jequié\",\n  \"state\": \"BA\",\n  \"country\": \"Brasil\",\n  \"latitude\": -23.550520,\n  \"longitude\": -46.633308,\n  \"created_at\": \"2025-01-18T12:00:00Z\",\n  \"updated_at\": \"2025-01-18T12:00:00Z\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
