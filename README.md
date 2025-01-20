@@ -71,7 +71,7 @@ Make sure you have the following installed:
 1. Build and start the Docker containers:
 
    ```bash
-   docker compose up --build
+   docker compose up -d --build
    ```
 
 2. Access the containers:
@@ -84,6 +84,11 @@ Make sure you have the following installed:
    - Backend:
      ```bash
      docker exec -it go-api /bin/sh
+     ```
+
+   - If the backend API does not automatically run after the build, navigate to the go-api container and start the server using the command:
+     ```bash
+     air
      ```
 
    - MySQL:
