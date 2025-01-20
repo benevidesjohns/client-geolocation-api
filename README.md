@@ -79,22 +79,33 @@ Make sure you have the following installed:
 
    - Frontend:
      ```bash
-     docker exec -it go-front /bin/bash
+     docker exec -it go-front bash
      ```
+      Now run the following commands:
+
+     ```bash
+     npm install
+     ```
+      To install the required packages (node_modules).
+      
+     ```bash
+     npm run dev
+     ```
+     To run the front-end application.
 
    - Backend:
      ```bash
-     docker exec -it go-api /bin/sh
+     docker exec -it go-api sh
      ```
 
-   - If the backend API does not automatically run after the build, navigate to the go-api container and start the server using the command:
+   - Navigate to the go-api container and start the server using the command:
      ```bash
      air
      ```
 
    - MySQL:
      ```bash
-     docker exec -it go-mysql /bin/sh
+     docker exec -it go-mysql sh
      ```
 
 3. Open the frontend in your browser:
@@ -106,7 +117,7 @@ Make sure you have the following installed:
 4. Backend API will be available at:
 
    ```
-   http://localhost:8080/api
+   http://localhost:8080/api/deliveries
    ```
 
 ---
