@@ -22,24 +22,8 @@ As bibliotecas externas que utilizei foram:
 
 Utilizei o Air pra acelerar o processo de desenvolvimento, pois essa ferramenta eliminou a necessidade de compiilar e reiniciar manualmente os containers da aplicação sempre que havia alterações no código. Por isso, removi o comando "go build -o" do Dockerfile, visto que o Air iria cuidar da recompilação durante o desenvolvimento.
 
-Em relação ao front-end, implementei alguns componentes, que eram necessários para a manipulação dos dados, com exceção do mapa, como: 
+Em relação ao front-end, implementei alguns componentes, que eram necessários para a manipulação dos dados, como: 
 
 - Formulário para criação e edição;
 - Tabela para visualização dos dados;
 - Filtros de busca (por ID e cidade).
-
-**Requisitos obrigatórios que não foram entregues**
-
-Infelizmente, não consegui finalizar o front-end, pois passei muito tempo estudando a linguagem Golang, focando mais na implementação do back-end.
-
-A API está funcionando mas não documentada com o Swagger, porém, ela pode ser testada no Postman (deixei o arquivo do Postman na raíz do projeto, para facilitar os testes).
-
-No front-end, embora eu tenha criado um serviço para fazer as requisições em todos os endpoints da API, as únicas requisições feitas foram: deleção e leitura dos dados com alguns atributos na tabela.
-
-Além disso, não tive tempo de criar os testes de integração. Meu intuito era implementar testes de unidade para os usecases e handlers, mas isso foi inviável.
-
-Dessa forma, não sobrou tempo para implementar a integração com a API de Mapas; buscar coordenadas através de um endereço, bem como integrar as coordenadas em um mapa junto à tabela.
-
-**Considerações**
-
-Apesar da não conclusão do teste, mesmo com requisitos obrigatórios, busquei aproveitar o tempo para implementar com eficiência a API. O projeto está bem estruturado e permite fácil manutenção e testabilidade.
